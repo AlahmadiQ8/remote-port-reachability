@@ -3,10 +3,8 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.*?>
 
-
-<?import javafx.collections.FXCollections?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
 <StackPane alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
            prefHeight="400.0" prefWidth="550.0" style="-fx-padding: 20;" xmlns="http://javafx.com/javafx/8"
            xmlns:fx="http://javafx.com/fxml/1"
@@ -21,15 +19,17 @@
                 </HBox.margin>
             </Label>
         </HBox>
-        <Button mnemonicParsing="false" text="Edit Rows"/>
-        <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0">
+        <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" editable="true">
             <columns>
-                <TableColumn prefWidth="120.0" text="Host">
+                <TableColumn prefWidth="120.0" text="Host" editable="true" onEditCommit="#onEditHost">
                     <cellValueFactory>
                         <PropertyValueFactory property="host" />
                     </cellValueFactory>
+                    <cellFactory>
+                        <TextFieldTableCell fx:factory="forTableColumn" />
+                    </cellFactory>
                 </TableColumn>
-                <TableColumn prefWidth="75.0" text="Port">
+                <TableColumn  fx:id="portColumn" prefWidth="75.0" text="Port" editable="true" onEditCommit="#onEditPort">
                     <cellValueFactory>
                         <PropertyValueFactory property="port" />
                     </cellValueFactory>
@@ -40,21 +40,24 @@
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn prefWidth="65.0"/>
-                <TableColumn prefWidth="200.0" text="Description">
+                <TableColumn prefWidth="200.0" text="Description" editable="true" onEditCommit="#onEditDescription" >
                     <cellValueFactory>
                         <PropertyValueFactory property="description" />
                     </cellValueFactory>
+                    <cellFactory>
+                        <TextFieldTableCell fx:factory="forTableColumn" />
+                    </cellFactory>
                 </TableColumn>
             </columns>
             <items />
         </TableView>
-        <HBox fx:id="addRowContainer" prefHeight="100.0" prefWidth="600.0" style="-fx-spacing: 10;">
+        <HBox fx:id="addRowContainer" prefHeight="50.0" prefWidth="600.0" style="-fx-spacing: 10;">
             <children>
-                <TextField promptText="Host" />
-                <TextField prefWidth="50.0" promptText="Port" />
-                <TextField promptText="Description" />
-                <Button mnemonicParsing="false" text="Add" />
-                <Button mnemonicParsing="false" text="Delete" />
+                <TextField fx:id="hostTextField" promptText="Host" />
+                <TextField fx:id="portTextField" prefWidth="50.0" promptText="Port" />
+                <TextField fx:id="descriptionTextField" promptText="Description" />
+                <Button onAction="#addRowHandler" text="Add" />
+                <Button text="Delete" onAction="#onDelete" />
             </children>
         </HBox>
     </VBox>

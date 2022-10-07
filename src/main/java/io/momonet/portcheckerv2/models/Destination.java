@@ -17,6 +17,9 @@ public class Destination {
         this.status = false;
     }
 
+    public Destination() {
+    }
+
     public String getHost() {
         return host;
     }
