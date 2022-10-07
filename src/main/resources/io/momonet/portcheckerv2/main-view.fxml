@@ -8,7 +8,7 @@
 <?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <StackPane alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-           prefHeight="400.0" prefWidth="600.0" style="-fx-padding: 20;" xmlns="http://javafx.com/javafx/8"
+           prefHeight="400.0" prefWidth="550.0" style="-fx-padding: 20;" xmlns="http://javafx.com/javafx/8"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="io.momonet.portcheckerv2.HelloController">
     <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-spacing: 10;">
@@ -34,13 +34,13 @@
                         <PropertyValueFactory property="port" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn prefWidth="75.0" text="Status">
+                <TableColumn prefWidth="60.0" text="Status">
                     <cellValueFactory>
                         <PropertyValueFactory property="status"  />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn prefWidth="75.0"/>
-                <TableColumn prefWidth="259.0" text="Description">
+                <TableColumn prefWidth="65.0"/>
+                <TableColumn prefWidth="200.0" text="Description">
                     <cellValueFactory>
                         <PropertyValueFactory property="description" />
                     </cellValueFactory>
@@ -48,5 +48,14 @@
             </columns>
             <items />
         </TableView>
+        <HBox fx:id="addRowContainer" prefHeight="100.0" prefWidth="600.0" style="-fx-spacing: 10;">
+            <children>
+                <TextField promptText="Host" />
+                <TextField prefWidth="50.0" promptText="Port" />
+                <TextField promptText="Description" />
+                <Button mnemonicParsing="false" text="Add" />
+                <Button mnemonicParsing="false" text="Delete" />
+            </children>
+        </HBox>
     </VBox>
 </StackPane>
