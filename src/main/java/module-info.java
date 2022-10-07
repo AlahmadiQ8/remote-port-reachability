@@ -7,5 +7,6 @@ module io.momonet.portcheckerv2 {
     requires net.synedra.validatorfx;
 
     opens io.momonet.portcheckerv2 to javafx.fxml;
+    opens io.momonet.portcheckerv2.models to javafx.base;
     exports io.momonet.portcheckerv2;
 }

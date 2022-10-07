@@ -5,6 +5,8 @@
 <?import javafx.scene.layout.*?>
 
 
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <StackPane alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
            prefHeight="400.0" prefWidth="600.0" style="-fx-padding: 20;" xmlns="http://javafx.com/javafx/8"
            xmlns:fx="http://javafx.com/fxml/1"
@@ -20,14 +22,31 @@
             </Label>
         </HBox>
         <Button mnemonicParsing="false" text="Edit Rows"/>
-        <TableView prefHeight="200.0" prefWidth="200.0">
+        <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0">
             <columns>
-                <TableColumn prefWidth="75.0" text="Host"/>
-                <TableColumn prefWidth="75.0" text="Port"/>
-                <TableColumn prefWidth="75.0" text="Status"/>
+                <TableColumn prefWidth="120.0" text="Host">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="host" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn prefWidth="75.0" text="Port">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="port" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn prefWidth="75.0" text="Status">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="status"  />
+                    </cellValueFactory>
+                </TableColumn>
                 <TableColumn prefWidth="75.0"/>
-                <TableColumn prefWidth="259.0" text="Description"/>
+                <TableColumn prefWidth="259.0" text="Description">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="description" />
+                    </cellValueFactory>
+                </TableColumn>
             </columns>
+            <items />
         </TableView>
     </VBox>
 </StackPane>

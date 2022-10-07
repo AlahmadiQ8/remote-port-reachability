@@ -10,6 +10,13 @@ public class Destination {
 
     private boolean status;
 
+    public Destination(String host, Integer port, String description) {
+        this.host = host;
+        this.port = port;
+        this.description = description;
+        this.status = false;
+    }
+
     public String getHost() {
         return host;
     }
