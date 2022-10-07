@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<StackPane alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+           prefHeight="400.0" prefWidth="600.0" style="-fx-padding: 20;" xmlns="http://javafx.com/javafx/8"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="io.momonet.portcheckerv2.HelloController">
+    <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-spacing: 10;">
+        <HBox alignment="CENTER_LEFT" maxHeight="20.0" minHeight="-Infinity" minWidth="-Infinity">
+            <Button fx:id="checkAllButton" mnemonicParsing="false" onAction="#checkAllButtonHandler"
+                    text="Check All"/>
+            <Label fx:id="statusLabel" text="Status">
+                <HBox.margin>
+                    <Insets left="10.0"/>
+                </HBox.margin>
+            </Label>
+        </HBox>
+        <Button mnemonicParsing="false" text="Edit Rows"/>
+        <TableView prefHeight="200.0" prefWidth="200.0">
+            <columns>
+                <TableColumn prefWidth="75.0" text="Host"/>
+                <TableColumn prefWidth="75.0" text="Port"/>
+                <TableColumn prefWidth="75.0" text="Status"/>
+                <TableColumn prefWidth="75.0"/>
+                <TableColumn prefWidth="259.0" text="Description"/>
+            </columns>
+        </TableView>
+    </VBox>
+</StackPane>
