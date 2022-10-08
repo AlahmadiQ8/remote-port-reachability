@@ -13,10 +13,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URISyntaxException;
@@ -49,10 +46,7 @@ public class HelloController {
         progressBar.setVisible(false);
 
         destinations.addAll(
-                new Destination("8.8.8.8", 80, "This is a nice description"),
-                new Destination("google.com", 443, "This is a what description"),
-                new Destination("finanteq.omg", 123, "This is a another description"),
-                new Destination("ns1.telstra.net", 80, "This is a nice description")
+                new Destination("google.com", 443, "This is a what description")
         );
 
         tableView.setItems(destinations);
@@ -193,6 +187,21 @@ public class HelloController {
                 var description = values[2];
                 destinations.add(new Destination(host, port, description));
             }
+        }
+    }
+
+    public void exportToFile(ActionEvent actionEvent) throws IOException {
+        var file = fileChooser.showSaveDialog(null);
+        if (file != null) {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            var str = new StringBuilder();
+            str.append("host,port,description\n");
+            for (Destination d : destinations) {
+                str.append(d.getHost() + "," + d.getPort().toString() + "," + d.getDescription() + "\n");
+            }
+            writer.write(str.toString());
+            writer.close();
+            statusLabel.setText("Successfully exported to " + file.getPath());
         }
     }
 
