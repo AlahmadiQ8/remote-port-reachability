@@ -17,6 +17,13 @@ public class Destination {
         this.status = Status.UNKNOWN;
     }
 
+    public Destination(String host, String port, String description) {
+        this.host = host;
+        this.port = Integer.parseInt(port);
+        this.description = description;
+        this.status = Status.UNKNOWN;
+    }
+
     public Destination() {
     }
 

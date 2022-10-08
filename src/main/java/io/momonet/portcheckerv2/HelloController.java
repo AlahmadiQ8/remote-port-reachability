@@ -10,11 +10,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.URISyntaxException;
 
 public class HelloController {
 
@@ -33,12 +38,14 @@ public class HelloController {
     @FXML private TextField portTextField;
     @FXML private TextField descriptionTextField;
 
+    final FileChooser fileChooser = new FileChooser();
+
 
     public HelloController() {
     }
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException, URISyntaxException {
         progressBar.setVisible(false);
 
         destinations.addAll(
@@ -57,7 +64,6 @@ public class HelloController {
                     switch (destination.getStatus()) {
                         case REACHABLE -> setStyle("-fx-background-color: #ceffce;");
                         case UNREACHABLE -> setStyle("-fx-background-color: #ffc9c9;");
-                        default -> setStyle("-fx-background-color: none;");
                     }
                 }
             }
@@ -84,10 +90,8 @@ public class HelloController {
                         try (Socket soc = new Socket()) {
                             soc.connect(new InetSocketAddress(d.getHost(), d.getPort()), 3000);
                         }
-                        Platform.runLater(() -> statusLabel.setText(d.getHost() + ":" + d.getPort() + " is reachable"));
                         d.setStatus(Status.REACHABLE);
                     } catch (IOException ex) {
-                        Platform.runLater(() -> statusLabel.setText(d.getHost() + ":" + d.getPort() + " is not reachable"));
                         d.setStatus(Status.UNREACHABLE);
                     } finally {
                         updateProgress(i + 1, length);
@@ -174,6 +178,22 @@ public class HelloController {
         var thread = new Thread(task);
         thread.start();
         return d;
+    }
+
+    public void chooseFile(ActionEvent actionEvent) throws IOException {
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            var br = new BufferedReader(new FileReader(file));
+            br.readLine();
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(",");
+                var host = values[0];
+                var port = values[1];
+                var description = values[2];
+                destinations.add(new Destination(host, port, description));
+            }
+        }
     }
 
     class IntegerConverter extends StringConverter<Integer> {

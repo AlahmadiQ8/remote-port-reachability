@@ -20,6 +20,15 @@
             </Label>
             <ProgressBar fx:id="progressBar" />
         </HBox>
+        <HBox alignment="CENTER_LEFT" maxHeight="20.0" minHeight="-Infinity" minWidth="-Infinity">
+            <Button fx:id="chooseFileButton" mnemonicParsing="false" onAction="#chooseFile"
+                    text="Load CSV Data"/>
+            <Label text="headers: host,port,description">
+                <HBox.margin>
+                    <Insets left="10.0"/>
+                </HBox.margin>
+            </Label>
+        </HBox>
         <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" editable="true">
             <columns>
                 <TableColumn prefWidth="120.0" text="Host" editable="true" onEditCommit="#onEditHost">
