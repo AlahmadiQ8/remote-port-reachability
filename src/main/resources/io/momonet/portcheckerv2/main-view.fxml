@@ -50,7 +50,7 @@
                         <PropertyValueFactory property="port"/>
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn prefWidth="76.0" text="Status">
+                <TableColumn prefWidth="80.0" text="Status">
                     <cellValueFactory>
                         <PropertyValueFactory property="status"/>
                     </cellValueFactory>

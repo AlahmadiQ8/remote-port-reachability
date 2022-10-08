@@ -8,8 +8,10 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
 
@@ -22,18 +24,25 @@ public class HelloController {
 
     private ObservableList<Destination> destinations = FXCollections.observableArrayList();
 
-    @FXML private TableColumn portColumn;
-    @FXML private TableColumn actionColumn;
+    @FXML
+    private TableColumn portColumn;
+    @FXML
+    private TableColumn actionColumn;
 
-    @FXML private Label statusLabel;
-    @FXML private ProgressBar progressBar;
+    @FXML
+    private Label statusLabel;
+    @FXML
+    private ProgressBar progressBar;
 
     @FXML
     private TableView<Destination> tableView;
 
-    @FXML private TextField hostTextField;
-    @FXML private TextField portTextField;
-    @FXML private TextField descriptionTextField;
+    @FXML
+    private TextField hostTextField;
+    @FXML
+    private TextField portTextField;
+    @FXML
+    private TextField descriptionTextField;
 
     final FileChooser fileChooser = new FileChooser();
 
@@ -46,7 +55,8 @@ public class HelloController {
         progressBar.setVisible(false);
 
         destinations.addAll(
-                new Destination("google.com", 443, "This is a what description")
+                new Destination("google.com", 443, "This is an example"),
+                new Destination("checkip.amazonaws.com", 80, "A site to find your public IP Address")
         );
 
         tableView.setItems(destinations);
@@ -55,16 +65,39 @@ public class HelloController {
             protected void updateItem(Destination destination, boolean empty) {
                 super.updateItem(destination, empty);
                 if (!empty) {
-                    switch (destination.getStatus()) {
-                        case REACHABLE -> setStyle("-fx-background-color: #ceffce;");
-                        case UNREACHABLE -> setStyle("-fx-background-color: #ffc9c9;");
+                    if (!isSelected()) {
+                        switch (destination.getStatus()) {
+                            case REACHABLE -> setStyle("-fx-background-color: #ceffce;");
+                            case UNREACHABLE -> setStyle("-fx-background-color: #ffc9c9;");
+                        }
                     }
+                    else {
+                        setStyle("-fx-background-color: -fx-background, -fx-cell-focus-inner-border, -fx-background;");
+                    }
+
                 }
             }
         });
 
         portColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerConverter()));
         actionColumn.setCellFactory(ActionButtonTableCell.forTableColumn("Check", this::onCheckRow));
+
+        Platform.runLater(() -> {
+            tableView.getScene().addEventFilter(MouseEvent.MOUSE_CLICKED, evt -> {
+                Node source = evt.getPickResult().getIntersectedNode();
+
+                // move up through the node hierarchy until a TableRow or scene root is found
+                while (source != null && !(source instanceof TableRow)) {
+                    source = source.getParent();
+                }
+
+
+                // clear selection on click anywhere but on a filled row
+                if (source == null || (source instanceof TableRow && ((TableRow) source).isEmpty())) {
+                    tableView.getSelectionModel().clearSelection();
+                }
+            });
+        });
     }
 
     @FXML
@@ -111,6 +144,7 @@ public class HelloController {
         destination.setHost(hostTextField.getText());
         destination.setPort(Integer.parseInt(portTextField.getText()));
         destination.setDescription(descriptionTextField.getText());
+        destination.setStatus(Status.UNKNOWN);
         tableView.getItems().add(destination);
         hostTextField.clear();
         portTextField.clear();
