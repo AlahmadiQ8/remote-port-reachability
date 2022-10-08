@@ -1,16 +1,19 @@
 package io.momonet.portcheckerv2;
 
 import io.momonet.portcheckerv2.models.Destination;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 
 public class HelloController {
 
@@ -39,19 +42,16 @@ public class HelloController {
         statusLabel.setText("initialized");
 
         destinations.addAll(
-                new Destination("123.23.4,2", 123, "This is a nice description"),
+                new Destination("8.8.8.8", 80, "This is a nice description"),
                 new Destination("google.com", 443, "This is a what description"),
                 new Destination("finanteq.omg", 123, "This is a another description"),
-                new Destination("localhost", 123, "This is a nice description")
+                new Destination("ns1.telstra.net", 80, "This is a nice description")
         );
 
         tableView.setItems(destinations);
 
         portColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerConverter()));
-        actionColumn.setCellFactory(ActionButtonTableCell.forTableColumn("Remove", (Destination p) -> {
-            System.out.println(p.getHost() + p.getPort());
-            return p;
-        }));
+        actionColumn.setCellFactory(ActionButtonTableCell.forTableColumn("Check", this::onCheckRow));
     }
 
     @FXML
@@ -97,6 +97,36 @@ public class HelloController {
         var allProducts = tableView.getItems();
         var productsSelected = tableView.getSelectionModel().getSelectedItems();
         productsSelected.forEach(allProducts::remove);
+    }
+
+    public Destination onCheckRow(Destination d, Button b) {
+        var task = new Task<Destination>() {
+            @Override
+            protected Destination call() throws Exception {
+                b.setDisable(true);
+                Platform.runLater(() -> statusLabel.setText("Checking " + d.getHost() + ":" + d.getPort() + "..."));
+                try {
+                    tableView.setEditable(false);
+                    try (Socket soc = new Socket()) {
+                        soc.connect(new InetSocketAddress(d.getHost(), d.getPort()), 3000);
+                    }
+                    Platform.runLater(() -> statusLabel.setText(d.getHost() + ":" + d.getPort() + " is reachable"));
+                    d.setStatus(true);
+                } catch (IOException ex) {
+                    Platform.runLater(() -> statusLabel.setText(d.getHost() + ":" + d.getPort() + " is not reachable"));
+                    d.setStatus(false);
+                } finally {
+                    tableView.refresh();
+                    b.setDisable(false);
+                    tableView.setEditable(true);
+                    return d;
+                }
+            }
+        };
+
+        var thread = new Thread(task);
+        thread.start();
+        return d;
     }
 
     class IntegerConverter extends StringConverter<Integer> {

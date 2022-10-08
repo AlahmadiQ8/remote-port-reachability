@@ -1,5 +1,7 @@
 package io.momonet.portcheckerv2;
 
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import javafx.event.ActionEvent;
@@ -14,12 +16,12 @@ import javafx.util.Callback;
 public class ActionButtonTableCell<S> extends TableCell<S, Button> {
     private final Button actionButton;
 
-    public ActionButtonTableCell(String label, Function<S, S> function) {
+    public ActionButtonTableCell(String label, BiFunction<S, Button, S> function) {
         this.getStyleClass().add("action-button-table-cell");
 
         this.actionButton = new Button(label);
         this.actionButton.setOnAction((ActionEvent e) -> {
-            function.apply(getCurrentItem());
+            function.apply(getCurrentItem(), this.actionButton);
         });
         this.actionButton.setMaxWidth(Double.MAX_VALUE);
     }
@@ -39,7 +41,7 @@ public class ActionButtonTableCell<S> extends TableCell<S, Button> {
         }
     }
 
-    public static <S> Callback<TableColumn<S, Button>, TableCell<S, Button>> forTableColumn(String label, Function< S, S> function) {
+    public static <S> Callback<TableColumn<S, Button>, TableCell<S, Button>> forTableColumn(String label, BiFunction< S, Button, S> function) {
         return param -> new ActionButtonTableCell<>(label, function);
     }
 }
