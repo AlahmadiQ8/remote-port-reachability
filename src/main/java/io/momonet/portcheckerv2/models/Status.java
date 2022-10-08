@@ -3,5 +3,7 @@ package io.momonet.portcheckerv2.models;
 public enum Status {
     REACHABLE,
     UNREACHABLE,
-    UNKNOWN
+    UNKNOWN,
+    // TODO: Use loading status for disabling buttons
+    LOADING,
 }

@@ -13,11 +13,12 @@
         <HBox alignment="CENTER_LEFT" maxHeight="20.0" minHeight="-Infinity" minWidth="-Infinity">
             <Button fx:id="checkAllButton" mnemonicParsing="false" onAction="#checkAllButtonHandler"
                     text="Check All"/>
-            <Label fx:id="statusLabel" text="Status">
+            <Label fx:id="statusLabel" text="">
                 <HBox.margin>
                     <Insets left="10.0"/>
                 </HBox.margin>
             </Label>
+            <ProgressBar fx:id="progressBar" />
         </HBox>
         <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" editable="true">
             <columns>

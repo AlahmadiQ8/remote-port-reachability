@@ -23,8 +23,8 @@ public class HelloController {
     @FXML private TableColumn portColumn;
     @FXML private TableColumn actionColumn;
 
-    @FXML
-    private Label statusLabel;
+    @FXML private Label statusLabel;
+    @FXML private ProgressBar progressBar;
 
     @FXML
     private TableView<Destination> tableView;
@@ -39,8 +39,7 @@ public class HelloController {
 
     @FXML
     public void initialize() {
-        System.out.println("initializing");
-        statusLabel.setText("initialized");
+        progressBar.setVisible(false);
 
         destinations.addAll(
                 new Destination("8.8.8.8", 80, "This is a nice description"),
@@ -70,6 +69,42 @@ public class HelloController {
 
     @FXML
     protected void checkAllButtonHandler() {
+        var task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                var length = destinations.size();
+                tableView.setEditable(false);
+                Platform.runLater(() -> {
+                    statusLabel.setText("");
+                    progressBar.setVisible(true);
+                });
+                for (int i = 0; i < length; i++) {
+                    var d = destinations.get(i);
+                    try {
+                        try (Socket soc = new Socket()) {
+                            soc.connect(new InetSocketAddress(d.getHost(), d.getPort()), 3000);
+                        }
+                        Platform.runLater(() -> statusLabel.setText(d.getHost() + ":" + d.getPort() + " is reachable"));
+                        d.setStatus(Status.REACHABLE);
+                    } catch (IOException ex) {
+                        Platform.runLater(() -> statusLabel.setText(d.getHost() + ":" + d.getPort() + " is not reachable"));
+                        d.setStatus(Status.UNREACHABLE);
+                    } finally {
+                        updateProgress(i + 1, length);
+                    }
+                }
+                tableView.setEditable(true);
+                Platform.runLater(() -> {
+                    progressBar.setVisible(false);
+                    statusLabel.setText("Checked reachability for " + length + " destinations");
+                    tableView.refresh();
+                });
+                return null;
+            }
+        };
+        progressBar.progressProperty().bind(task.progressProperty());
+        var thread = new Thread(task);
+        thread.start();
     }
 
     @FXML
