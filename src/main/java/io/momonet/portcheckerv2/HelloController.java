@@ -17,6 +17,7 @@ public class HelloController {
     private ObservableList<Destination> destinations = FXCollections.observableArrayList();
 
     @FXML private TableColumn portColumn;
+    @FXML private TableColumn actionColumn;
 
     @FXML
     private Label statusLabel;
@@ -46,7 +47,11 @@ public class HelloController {
 
         tableView.setItems(destinations);
 
-        portColumn.setCellFactory(TextFieldTableCell.forTableColumn(new PortConverter()));
+        portColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerConverter()));
+        actionColumn.setCellFactory(ActionButtonTableCell.forTableColumn("Remove", (Destination p) -> {
+            System.out.println(p.getHost() + p.getPort());
+            return p;
+        }));
     }
 
     @FXML
@@ -94,7 +99,7 @@ public class HelloController {
         productsSelected.forEach(allProducts::remove);
     }
 
-    class PortConverter extends StringConverter<Integer> {
+    class IntegerConverter extends StringConverter<Integer> {
 
         @Override
         public String toString(Integer integer) {

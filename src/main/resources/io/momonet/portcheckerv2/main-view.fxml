@@ -23,41 +23,41 @@
             <columns>
                 <TableColumn prefWidth="120.0" text="Host" editable="true" onEditCommit="#onEditHost">
                     <cellValueFactory>
-                        <PropertyValueFactory property="host" />
+                        <PropertyValueFactory property="host"/>
                     </cellValueFactory>
                     <cellFactory>
-                        <TextFieldTableCell fx:factory="forTableColumn" />
+                        <TextFieldTableCell fx:factory="forTableColumn"/>
                     </cellFactory>
                 </TableColumn>
-                <TableColumn  fx:id="portColumn" prefWidth="75.0" text="Port" editable="true" onEditCommit="#onEditPort">
+                <TableColumn fx:id="portColumn" prefWidth="75.0" text="Port" editable="true" onEditCommit="#onEditPort">
                     <cellValueFactory>
-                        <PropertyValueFactory property="port" />
+                        <PropertyValueFactory property="port"/>
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn prefWidth="60.0" text="Status">
                     <cellValueFactory>
-                        <PropertyValueFactory property="status"  />
+                        <PropertyValueFactory property="status"/>
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn prefWidth="65.0"/>
-                <TableColumn prefWidth="200.0" text="Description" editable="true" onEditCommit="#onEditDescription" >
+                <TableColumn prefWidth="65.0" text="Action" fx:id="actionColumn"/>
+                <TableColumn prefWidth="200.0" text="Description" editable="true" onEditCommit="#onEditDescription">
                     <cellValueFactory>
-                        <PropertyValueFactory property="description" />
+                        <PropertyValueFactory property="description"/>
                     </cellValueFactory>
                     <cellFactory>
-                        <TextFieldTableCell fx:factory="forTableColumn" />
+                        <TextFieldTableCell fx:factory="forTableColumn"/>
                     </cellFactory>
                 </TableColumn>
             </columns>
-            <items />
+            <items/>
         </TableView>
         <HBox fx:id="addRowContainer" prefHeight="50.0" prefWidth="600.0" style="-fx-spacing: 10;">
             <children>
-                <TextField fx:id="hostTextField" promptText="Host" />
-                <TextField fx:id="portTextField" prefWidth="50.0" promptText="Port" />
-                <TextField fx:id="descriptionTextField" promptText="Description" />
-                <Button onAction="#addRowHandler" text="Add" />
-                <Button text="Delete" onAction="#onDelete" />
+                <TextField fx:id="hostTextField" promptText="Host"/>
+                <TextField fx:id="portTextField" prefWidth="50.0" promptText="Port"/>
+                <TextField fx:id="descriptionTextField" promptText="Description"/>
+                <Button onAction="#addRowHandler" text="Add"/>
+                <Button text="Delete" onAction="#onDelete"/>
             </children>
         </HBox>
     </VBox>
