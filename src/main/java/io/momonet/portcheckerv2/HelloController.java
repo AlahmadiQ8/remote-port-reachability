@@ -1,6 +1,7 @@
 package io.momonet.portcheckerv2;
 
 import io.momonet.portcheckerv2.models.Destination;
+import io.momonet.portcheckerv2.models.Status;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -49,6 +50,19 @@ public class HelloController {
         );
 
         tableView.setItems(destinations);
+        tableView.setRowFactory(tv -> new TableRow<>() {
+            @Override
+            protected void updateItem(Destination destination, boolean empty) {
+                super.updateItem(destination, empty);
+                if (!empty) {
+                    switch (destination.getStatus()) {
+                        case REACHABLE -> setStyle("-fx-background-color: #ceffce;");
+                        case UNREACHABLE -> setStyle("-fx-background-color: #ffc9c9;");
+                        default -> setStyle("-fx-background-color: none;");
+                    }
+                }
+            }
+        });
 
         portColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerConverter()));
         actionColumn.setCellFactory(ActionButtonTableCell.forTableColumn("Check", this::onCheckRow));
@@ -56,8 +70,6 @@ public class HelloController {
 
     @FXML
     protected void checkAllButtonHandler() {
-        System.out.println("ooh");
-        statusLabel.setText("ooh");
     }
 
     @FXML
@@ -111,10 +123,10 @@ public class HelloController {
                         soc.connect(new InetSocketAddress(d.getHost(), d.getPort()), 3000);
                     }
                     Platform.runLater(() -> statusLabel.setText(d.getHost() + ":" + d.getPort() + " is reachable"));
-                    d.setStatus(true);
+                    d.setStatus(Status.REACHABLE);
                 } catch (IOException ex) {
                     Platform.runLater(() -> statusLabel.setText(d.getHost() + ":" + d.getPort() + " is not reachable"));
-                    d.setStatus(false);
+                    d.setStatus(Status.UNREACHABLE);
                 } finally {
                     tableView.refresh();
                     b.setDisable(false);

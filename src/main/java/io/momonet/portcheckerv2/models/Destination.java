@@ -8,13 +8,13 @@ public class Destination {
 
     private String description;
 
-    private boolean status;
+    private Status status;
 
     public Destination(String host, Integer port, String description) {
         this.host = host;
         this.port = port;
         this.description = description;
-        this.status = false;
+        this.status = Status.UNKNOWN;
     }
 
     public Destination() {
@@ -44,11 +44,11 @@ public class Destination {
         this.description = description;
     }
 
-    public boolean isStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 }
