@@ -209,6 +209,8 @@ public class HelloController {
     }
 
     public void chooseFile(ActionEvent actionEvent) throws IOException {
+        var extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
             var br = new BufferedReader(new FileReader(file));
@@ -218,13 +220,14 @@ public class HelloController {
                 String[] values = line.split(",");
                 var host = values[0];
                 var port = values[1];
-                var description = values[2];
-                destinations.add(new Destination(host, port, description));
+                destinations.add(new Destination(host, port, values.length == 3 ? values[2] : ""));
             }
         }
     }
 
     public void exportToFile(ActionEvent actionEvent) throws IOException {
+        var extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
         var file = fileChooser.showSaveDialog(null);
         if (file != null) {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
