@@ -2,6 +2,9 @@
 
 A JavaFX app to bulk check if remote port is reachable. This helps if you work at a corporate job and you need to bulk check if can access hosts/ports. 
 
+![image](https://user-images.githubusercontent.com/3461501/195350575-25d13e23-b9a6-4ada-8c59-0759c254a60e.png)
+
+
 ## Running the app 
 
 ### Download Image Files
