@@ -17,6 +17,10 @@ A JavaFX app to bulk check if remote port is reachable. This helps if you work a
 * Windows: go to `bin` folder and double click on `app.bat`. 
 * If a security message pops up, click "More Info" then "Run Anyway" 
 
-## Running on Mac
+### Running on Mac
 
 TBD 
+
+## Loading CSV files 
+
+* See [example csv](./example.csv)
