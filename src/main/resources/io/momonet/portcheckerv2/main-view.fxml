@@ -35,7 +35,7 @@
                 </HBox.margin>
             </Label>
         </HBox>
-        <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" editable="true">
+        <TableView fx:id="tableView" prefHeight="500.0" prefWidth="200.0" editable="true">
             <columns>
                 <TableColumn prefWidth="120.0" text="Host" editable="true" onEditCommit="#onEditHost">
                     <cellValueFactory>
