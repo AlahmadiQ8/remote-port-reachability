@@ -43,6 +43,10 @@ public class HelloController {
     private TextField portTextField;
     @FXML
     private TextField descriptionTextField;
+    @FXML
+    private TextField path;
+
+    @FXML private Button loadFromFile;
 
     final FileChooser fileChooser = new FileChooser();
 
@@ -54,10 +58,10 @@ public class HelloController {
     public void initialize() throws IOException, URISyntaxException {
         progressBar.setVisible(false);
 
-        destinations.addAll(
-                new Destination("google.com", 443, "This is an example"),
-                new Destination("checkip.amazonaws.com", 80, "A site to find your public IP Address")
-        );
+//        destinations.addAll(
+//                new Destination("google.com", 443, "This is an example"),
+//                new Destination("checkip.amazonaws.com", 80, "A site to find your public IP Address")
+//        );
 
         tableView.setItems(destinations);
         tableView.setRowFactory(tv -> new TableRow<>() {
@@ -70,8 +74,7 @@ public class HelloController {
                             case REACHABLE -> setStyle("-fx-background-color: #ceffce;");
                             case UNREACHABLE -> setStyle("-fx-background-color: #ffc9c9;");
                         }
-                    }
-                    else {
+                    } else {
                         setStyle("-fx-background-color: -fx-background, -fx-cell-focus-inner-border, -fx-background;");
                     }
 
@@ -97,6 +100,24 @@ public class HelloController {
                     tableView.getSelectionModel().clearSelection();
                 }
             });
+        });
+        loadFromFile.setOnAction(actionEvent -> {
+            try {
+                File file = new File(path.getText());
+                if (file != null && file.exists()) {
+                    FileReader reader = new FileReader(file);
+                    var br = new BufferedReader(reader);
+                    readDestinations(br);
+                }else{
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("File not found");
+                    alert.setContentText("File not found");
+                    alert.show();
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         });
     }
 
@@ -214,21 +235,25 @@ public class HelloController {
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
             var br = new BufferedReader(new FileReader(file));
-            br.readLine();
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] values = line.split(",");
-                var host = values[0];
-                var port = values[1];
-                destinations.add(new Destination(host, port, values.length == 3 ? values[2] : ""));
-            }
+            readDestinations(br);
+        }
+    }
+
+    private void readDestinations(BufferedReader br) throws IOException {
+        br.readLine();
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] values = line.split(",");
+            var host = values[0];
+            var port = values[1];
+            destinations.add(new Destination(host, port, values.length == 3 ? values[2] : ""));
         }
     }
 
     public void exportToFile(ActionEvent actionEvent) throws IOException {
         var extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
         fileChooser.getExtensionFilters().add(extFilter);
-        var file = fileChooser.showSaveDialog(null);
+        var file = fileChooser.showOpenDialog(null);
         if (file != null) {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             var str = new StringBuilder();
